@@ -1,0 +1,53 @@
+Deal ID,Date,Sales Person,Region,Category,Product,Stage,Revenue USD,Discount Pct,Sales Cycle Days,Account Name,Customer Tier
+DL-US-101,2026-10-02,Marcus Vance,US,Cloud & Infrastructure,CloudScale Engine,Closed Won,68000,5,28,Horizon Fintech,Enterprise
+DL-US-102,2026-10-06,Marcus Vance,US,AI & Data Intelligence,Cognitive Copilot Studio,Closed Won,74000,8,32,Aegis Healthcare,Enterprise
+DL-US-103,2026-10-12,Marcus Vance,US,Security & Compliance,ZeroTrust Access Gateway,Closed Won,45000,4,22,Beacon Logistics,Mid-Market
+DL-US-104,2026-10-17,Marcus Vance,US,Cloud & Infrastructure,Kubernetes Fleet Manager,Closed Won,38000,6,24,Silverline Media,Mid-Market
+DL-US-105,2026-10-20,Marcus Vance,US,AI & Data Intelligence,AutoPipeline ML Ops,Closed Lost,52000,15,45,Quantum Capital,Enterprise
+DL-US-106,2026-10-03,Sarah Chen,US,Security & Compliance,ThreatShield SIEM,Closed Won,62000,6,26,BioHealth Labs,Enterprise
+DL-US-107,2026-10-08,Sarah Chen,US,AI & Data Intelligence,Cognitive Copilot Studio,Closed Won,58000,5,21,Strata Commerce,Enterprise
+DL-US-108,2026-10-14,Sarah Chen,US,Cloud & Infrastructure,Database Cluster Pro,Closed Won,44000,4,19,Optima Retail Systems,Mid-Market
+DL-US-109,2026-10-18,Sarah Chen,US,Collaboration & Workflows,TeamSync Workspace Pro,Closed Won,28000,0,14,Vertex Design Group,Scale-Up
+DL-US-110,2026-10-21,Sarah Chen,US,Security & Compliance,API Sentinel Guard,In Pipeline,35000,8,18,NextGen Payments,Mid-Market
+DL-US-111,2026-10-04,Maya Rodriguez,US,Collaboration & Workflows,CustomerPortal Connect,Closed Won,34000,7,18,Kite Logistics,Mid-Market
+DL-US-112,2026-10-09,Maya Rodriguez,US,Collaboration & Workflows,DocuSignify Enterprise,Closed Won,31000,5,16,Pinnacle Legal Services,Mid-Market
+DL-US-113,2026-10-13,Maya Rodriguez,US,Cloud & Infrastructure,Serverless Flow Runtime,Closed Won,42000,10,25,StreamWave Gaming,Mid-Market
+DL-US-114,2026-10-17,Maya Rodriguez,US,AI & Data Intelligence,VoiceStream Speech AI,Closed Won,37000,8,22,Elevate Telephony,Scale-Up
+DL-US-115,2026-10-22,Maya Rodriguez,US,Security & Compliance,ThreatShield SIEM,Closed Lost,40000,18,38,Solaris Energy,Mid-Market
+DL-US-116,2026-10-05,David Miller,US,Security & Compliance,Identity Governance Suite,Closed Lost,72000,22,58,Pacific Rim Bank,Enterprise
+DL-US-117,2026-10-11,David Miller,US,Cloud & Infrastructure,Edge CDN Accelerator,Closed Won,32000,18,42,Metro Broadcast Inc,Mid-Market
+DL-US-118,2026-10-15,David Miller,US,AI & Data Intelligence,DocuExtract Neural OCR,Closed Lost,48000,20,49,Cascade Mutual Insurers,Enterprise
+DL-US-119,2026-10-19,David Miller,US,Collaboration & Workflows,DevKanban Agile Hub,Closed Won,22000,14,31,AppWorks Studio,Scale-Up
+DL-US-120,2026-10-22,David Miller,US,Security & Compliance,Compliance Vault Enterprise,In Pipeline,55000,12,40,Apex Health Systems,Enterprise
+DL-EU-201,2026-10-02,Elena Rossi,Europe,Security & Compliance,Compliance Vault Enterprise,Closed Won,78000,4,34,Milano Assicurazioni,Enterprise
+DL-EU-202,2026-10-07,Elena Rossi,Europe,Cloud & Infrastructure,CloudScale Engine,Closed Won,72000,5,29,Swiss Alpine Tech AG,Enterprise
+DL-EU-203,2026-10-14,Elena Rossi,Europe,AI & Data Intelligence,Cognitive Copilot Studio,Closed Won,56000,6,24,Bavaria Motor Components,Enterprise
+DL-EU-204,2026-10-19,Elena Rossi,Europe,Security & Compliance,ZeroTrust Access Gateway,Closed Lost,48000,10,37,Iberia Telecom,Enterprise
+DL-EU-205,2026-10-04,Arthur Dubois,Europe,Cloud & Infrastructure,Database Cluster Pro,Closed Won,52000,7,25,Lille Logistics Hub,Enterprise
+DL-EU-206,2026-10-10,Arthur Dubois,Europe,Collaboration & Workflows,CustomerPortal Connect,Closed Won,41000,6,21,Bruxelles Public Services,Mid-Market
+DL-EU-207,2026-10-15,Arthur Dubois,Europe,AI & Data Intelligence,AutoPipeline ML Ops,Closed Won,46000,8,27,AeroParis Engineering,Mid-Market
+DL-EU-208,2026-10-21,Arthur Dubois,Europe,Collaboration & Workflows,OmniChannel Desk,Closed Won,29000,5,16,GrandMagasin eCommerce,Scale-Up
+DL-EU-209,2026-10-03,Liam Schmidt,Europe,Cloud & Infrastructure,Kubernetes Fleet Manager,Closed Won,48000,8,30,Frankfurt Digital Bank,Enterprise
+DL-EU-210,2026-10-09,Liam Schmidt,Europe,Security & Compliance,ThreatShield SIEM,Closed Won,55000,7,28,Dusseldorf Steel Corp,Enterprise
+DL-EU-211,2026-10-16,Liam Schmidt,Europe,AI & Data Intelligence,Predictive Churn Engine,Closed Won,36000,5,23,Stuttgart Mobility Labs,Mid-Market
+DL-EU-212,2026-10-20,Liam Schmidt,Europe,Cloud & Infrastructure,Serverless Flow Runtime,Closed Lost,34000,12,35,Vienna Cloud Services,Mid-Market
+DL-EU-213,2026-10-05,Freja Lind,Europe,AI & Data Intelligence,DocuExtract Neural OCR,Closed Lost,42000,16,44,Nordic Forest Products,Enterprise
+DL-EU-214,2026-10-11,Freja Lind,Europe,Collaboration & Workflows,TeamSync Workspace Pro,Closed Won,33000,6,20,Stockholm Fintech AB,Scale-Up
+DL-EU-215,2026-10-17,Freja Lind,Europe,Security & Compliance,API Sentinel Guard,Closed Lost,38000,15,48,Helsinki Cargo Lines,Mid-Market
+DL-EU-216,2026-10-21,Freja Lind,Europe,Cloud & Infrastructure,Edge CDN Accelerator,Closed Won,29000,10,32,Oslo Media Group,Mid-Market
+DL-AS-301,2026-10-01,Kenji Tanaka,Asia,AI & Data Intelligence,Cognitive Copilot Studio,Closed Won,82000,3,26,Tokyo Precision Robotics,Enterprise
+DL-AS-302,2026-10-06,Kenji Tanaka,Asia,Cloud & Infrastructure,CloudScale Engine,Closed Won,64000,5,28,Osaka Chemical Systems,Enterprise
+DL-AS-303,2026-10-13,Kenji Tanaka,Asia,Security & Compliance,ZeroTrust Access Gateway,Closed Won,46000,4,20,Seoul Semiconductor,Enterprise
+DL-AS-304,2026-10-18,Kenji Tanaka,Asia,AI & Data Intelligence,AutoPipeline ML Ops,Closed Won,39000,6,22,Yokohama Smart Transit,Mid-Market
+DL-AS-305,2026-10-04,Priya Sharma,Asia,Collaboration & Workflows,CustomerPortal Connect,Closed Won,38000,8,17,Bengaluru Tech Park,Enterprise
+DL-AS-306,2026-10-09,Priya Sharma,Asia,Collaboration & Workflows,DocuSignify Enterprise,Closed Won,33000,5,15,Singapore Financial Network,Mid-Market
+DL-AS-307,2026-10-14,Priya Sharma,Asia,AI & Data Intelligence,VoiceStream Speech AI,Closed Won,42000,7,19,Hyderabad Telecom,Enterprise
+DL-AS-308,2026-10-19,Priya Sharma,Asia,Cloud & Infrastructure,Database Cluster Pro,Closed Won,39000,9,23,Jakarta eCommerce Express,Mid-Market
+DL-AS-309,2026-10-03,Wei Zhang,Asia,Cloud & Infrastructure,CloudScale Engine,Closed Won,58000,6,31,Shenzhen Hardware Cloud,Enterprise
+DL-AS-310,2026-10-08,Wei Zhang,Asia,Cloud & Infrastructure,Kubernetes Fleet Manager,Closed Won,47000,7,27,Shanghai Container Shipping,Enterprise
+DL-AS-311,2026-10-15,Wei Zhang,Asia,Security & Compliance,ThreatShield SIEM,Closed Lost,52000,14,45,Guangzhou Commercial Bank,Enterprise
+DL-AS-312,2026-10-21,Wei Zhang,Asia,Collaboration & Workflows,OmniChannel Desk,Closed Won,31000,5,18,Taipei Gaming Cloud,Scale-Up
+DL-AS-313,2026-10-04,Aiko Takahashi,Asia,AI & Data Intelligence,DocuExtract Neural OCR,Closed Lost,41000,20,52,Fukuoka Insurance Corp,Mid-Market
+DL-AS-314,2026-10-10,Aiko Takahashi,Asia,Collaboration & Workflows,DevKanban Agile Hub,Closed Won,19000,15,34,Kyoto Interactive Apps,Scale-Up
+DL-AS-315,2026-10-16,Aiko Takahashi,Asia,Security & Compliance,Identity Governance Suite,Closed Lost,60000,22,61,Manila Offshore Services,Enterprise
+DL-AS-316,2026-10-20,Aiko Takahashi,Asia,Collaboration & Workflows,TeamSync Workspace Pro,Closed Won,26000,10,24,Sapporo Creative Agency,Scale-Up

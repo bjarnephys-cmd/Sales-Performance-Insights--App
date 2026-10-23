@@ -1,0 +1,6 @@
+{
+  "name": "Sales Pulse - AI Sales Performance Insights",
+  "description": "AI-assisted SaaS sales insights dashboard providing performance breakdowns by region, rep, and product, executive summaries, and shareable reports from private spreadsheet data.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
