@@ -1,27 +1,50 @@
-Created by AI-Studio after this prompt
-#Scenario:
-You are a vibe coder working with the sales department of a SaaS company. The team tracks deals in spreadsheets, but during monthly review meetings, managers struggle to understand patterns:
-•	Which regions are performing best?
-•	Which sales persons are falling behind?
-•	Which products drive the most revenue?
-Task:
-Design an AI-assisted sales insights dashboard that helps the manager quickly:
-•	Summarize sales performance by region, sales person, and product.
-•	Highlight top performers and areas needing attention.
-•	Provide a short, plain-language "executive summary" for the monthly report.
-•	Allow switching between metrics (e.g., revenue, deals closed, average deal size).
-Constraints & Considerations:
-•	Data must remain private (uploaded spreadsheets only).
-•	Dashboard must be easily shareable with the wider team.
-Note: to test your solution generate a sample dataset in ChatGPT or find a relevant dataset on Kaggle. 
-Can you create/find such a sample dataset with Europe, Asia, US regions, Categories and 5 products within each category, sales numbers for a month 
+# Created by AI-Studio after this prompt
 
-Milestone 1: read only one datasheet
-Milestone 2: datasheets in different format, each datset must contain information about region, product, category(as this information is known)
+# 📊 AI-Assisted Sales Insights Dashboard
+
+## 🎯 Scenario
+As a vibe coder working with the sales department of a SaaS company, managers often struggle during monthly review meetings to extract clear patterns from spreadsheet data:
+* Which regions are performing best?
+* Which sales persons are falling behind?
+* Which products drive the most revenue?
+
+This project designs an AI-assisted sales insights dashboard to solve these challenges.
+
+---
+
+## 🚀 Core Features & Tasks
+* **Performance Summary:** Summarize sales performance by region, salesperson, and product.
+* **Smart Highlights:** Highlight top performers and areas needing attention.
+* **Executive Summary:** Provide a short, plain-language summary for monthly reports.
+* **Metric Switching:** Allow seamless switching between metrics (e.g., revenue, deals closed, average deal size).
+
+---
+
+## 🔒 Constraints & Considerations
+* **Data Privacy:** Data must remain private (processed via uploaded spreadsheets only).
+* **Collaboration:** Dashboard must be easily shareable with the wider team.
+
+---
+
+## 📂 Dataset Specifications
+The test/sample dataset includes:
+* **Regions:** Europe, Asia, US
+* **Structure:** Multiple categories with **5 products** within each category.
+* **Timeframe:** Monthly sales numbers.
+
+---
+
+## 🏁 Development Milestones
+* **[x] Milestone 1:** Read and process a single datasheet, a small dataset is provided, you can upload a csv file
+* **[x] Milestone 2:** Handle datasheets in different formats (ensuring required fields like region, product, and category are mapped).
+
+---
+
+## 🛠️ Status & Current Iteration
+Most core features are functional, and calculated numbers match cross-checks performed in Excel.
+
+### 🐛 Known Issues & Planned Improvements
+* **Filtering Bug:** Filtering by "USA" currently removes EU and Asia numbers entirely, and users cannot easily return to an unfiltered view.
+* **Metric Display:** Metric selection is currently restricted and displays only revenue.
 
 
-Status after this first iteration
-Most things works, numbers seems correct, according to my check with dataset in Excel
-Improvements
-Filtrering efter USA fjerner EU og Asia tal, og man kan ikke komme tilbage til ufiltreret
-Metrik   : vist kun efter revenue nu
