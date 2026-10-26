@@ -143,10 +143,17 @@ Accessible via the **"Indtast mål" / "Målstyring"** button:
 * **CSV Download**: Downloads the current configuration as `salesrep_target.csv`.
 * **CSV Import**: Upload a customized CSV file with automatic header synonym detection, delimiter detection (comma or semicolon), number cleaning, and error validation.
 
-#### Sample CSV Template (`salesrep_target.csv`)
-```csv
+### Sample CSV Template files
+* **Salesdata can be upload as a csv filen in this format**<br>
+Deal ID,Date,Sales Person,Region,Category,Product,Stage,Revenue USD,Discount Pct,Sales Cycle Days,Account Name,Customer Tier<br>
+One row:<br>
+DL-Europe-1001,2025-11-03,Arthur Dubois,Europe,Customer Success & Retention,Ticket Escalation Bot,Closed Won,29000,5,28,Shanghai Container Shipping,Mid-Market
+
+
+* **1y target sales numbers for sales rep can be uploaded as a csv file in this format**<br>
+```
 SalesRep,Region,AnnualTarget,MonthlyTarget
-Marcus Vance,US,1800000,150000
+Marcus Vance,US,1800000,150000  
 Sarah Chen,US,1600000,133333
 David Miller,US,1700000,141667
 Maya Rodriguez,US,1400000,116667
