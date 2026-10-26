@@ -6,7 +6,8 @@ import {
   FileText, 
   Download, 
   Lock,
-  Sparkles
+  Sparkles,
+  Target
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ interface HeaderProps {
   onOpenReport: () => void;
   onOpenShare: () => void;
   onDownloadSample: () => void;
+  onOpenTargetSettings?: () => void;
   isAiGenerating?: boolean;
 }
 
@@ -22,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenReport,
   onOpenShare,
   onDownloadSample,
+  onOpenTargetSettings,
   isAiGenerating,
 }) => {
   return (
@@ -93,6 +96,17 @@ export const Header: React.FC<HeaderProps> = ({
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
             </button>
+
+            {onOpenTargetSettings && (
+              <button
+                onClick={onOpenTargetSettings}
+                title="Se, upload & justér sælgernes års-targets (CSV eller manuelt)"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-300 hover:text-white bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-500/30 rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <Target className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Års-targets & Kvoter</span>
+              </button>
+            )}
 
             <button
               onClick={onOpenReport}

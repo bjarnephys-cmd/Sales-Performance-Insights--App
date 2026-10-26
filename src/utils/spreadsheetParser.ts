@@ -115,7 +115,7 @@ export function parseSpreadsheetData(csvText: string): ParseResult {
     const salesCycleDays = Math.max(1, parseInt(cleanCycleStr, 10) || 20);
 
     // Normalize Category
-    let category: ProductCategory = 'Cloud & Infrastructure';
+    let category: ProductCategory = rawCat || 'Cloud & Infrastructure';
     const cleanCat = rawCat.toLowerCase();
     if (cleanCat.includes('sec') || cleanCat.includes('threat') || cleanCat.includes('complian')) {
       category = 'Security & Compliance';
@@ -123,8 +123,16 @@ export function parseSpreadsheetData(csvText: string): ParseResult {
       category = 'AI & Data Intelligence';
     } else if (cleanCat.includes('collab') || cleanCat.includes('work') || cleanCat.includes('team') || cleanCat.includes('desk')) {
       category = 'Collaboration & Workflows';
-    } else {
+    } else if (cleanCat.includes('analytic') || cleanCat.includes('bi') || cleanCat.includes('forecast') || cleanCat.includes('metric')) {
+      category = 'Analytics & BI Intelligence';
+    } else if (cleanCat.includes('success') || cleanCat.includes('retention') || cleanCat.includes('churn') || cleanCat.includes('nps')) {
+      category = 'Customer Success & Retention';
+    } else if (cleanCat.includes('dev') || cleanCat.includes('api') || cleanCat.includes('webhook') || cleanCat.includes('sdk')) {
+      category = 'Developer Platforms & APIs';
+    } else if (cleanCat.includes('cloud') || cleanCat.includes('infra') || cleanCat.includes('server') || cleanCat.includes('db')) {
       category = 'Cloud & Infrastructure';
+    } else if (rawCat.trim()) {
+      category = rawCat.trim();
     }
 
     let tier: 'Enterprise' | 'Mid-Market' | 'Scale-Up' = 'Enterprise';

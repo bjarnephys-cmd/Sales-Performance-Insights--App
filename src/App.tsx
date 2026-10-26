@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { SAMPLE_DEALS, REPS_CONFIG } from './data/sampleDataset';
-import { Deal, MetricType, Region, ProductCategory, ExecutiveReport, RepSummary } from './types/sales';
-import { computeSalesMetrics } from './utils/salesAnalytics';
-import { triggerDownload } from './utils/spreadsheetParser';
+import { Deal, MetricType, Region, ProductCategory, StageFilter, ExecutiveReport, RepSummary, SalesRepProfile } from './types/sales';
+import { computeSalesMetrics, getAvailableMonths, formatCurrency, formatFullCurrency } from './utils/salesAnalytics';
+import { triggerDownload, exportDealsToCSV } from './utils/spreadsheetParser';
 
 import { Header } from './components/Header';
 import { KPICards } from './components/KPICards';
+import { MonthOverMonthBanner } from './components/MonthOverMonthBanner';
 import { MetricSwitcher } from './components/MetricSwitcher';
+import { ProductTrendChart } from './components/ProductTrendChart';
+import { RepTrendChart } from './components/RepTrendChart';
 import { RegionalInsights } from './components/RegionalInsights';
 import { RepLeaderboard } from './components/RepLeaderboard';
 import { ProductPerformance } from './components/ProductPerformance';
@@ -14,11 +17,12 @@ import { AskSalesAssistant } from './components/AskSalesAssistant';
 import { ExecutiveReportModal } from './components/ExecutiveReportModal';
 import { SpreadsheetUploadModal } from './components/SpreadsheetUploadModal';
 import { ShareModal } from './components/ShareModal';
+import { TargetSettingsModal } from './components/TargetSettingsModal';
 
 export default function App() {
   const [deals, setDeals] = useState<Deal[]>(SAMPLE_DEALS);
   const [datasetName, setDatasetName] = useState<string>(
-    'Master SaaS Dataset (Europe, Asia, US · 20 Products)'
+    'Master SaaS Dataset (1 Year · Europe, Asia, US · 7 Categories · 39 Products)'
   );
   const [isCustomDataset, setIsCustomDataset] = useState<boolean>(false);
 
@@ -27,22 +31,80 @@ export default function App() {
   const initialMetric = (urlParams.get('metric') as MetricType) || 'revenue';
   const initialRegion = (urlParams.get('region') as Region | 'ALL') || 'ALL';
   const initialCat = (urlParams.get('category') as ProductCategory | 'ALL') || 'ALL';
+  const initialStage = (urlParams.get('stage') as StageFilter) || 'Closed Won';
+  const initialPeriod = urlParams.get('period') || 'ALL';
 
   const [selectedMetric, setSelectedMetric] = useState<MetricType>(initialMetric);
   const [selectedRegion, setSelectedRegion] = useState<Region | 'ALL'>(initialRegion);
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'ALL'>(initialCat);
+  const [selectedStage, setSelectedStage] = useState<StageFilter>(initialStage);
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState<string>(initialPeriod);
 
   // Modals
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isTargetSettingsOpen, setIsTargetSettingsOpen] = useState(false);
+
+  // Sales Rep Quota / Target Configurations (persisted in localStorage)
+  const [repsConfig, setRepsConfig] = useState<SalesRepProfile[]>(() => {
+    try {
+      const saved = localStorage.getItem('salespulse_reps_config_v2');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error('Failed to parse saved reps config', e);
+    }
+    return REPS_CONFIG;
+  });
+
+  const handleSaveRepsConfig = (updatedReps: SalesRepProfile[]) => {
+    setRepsConfig(updatedReps);
+    try {
+      localStorage.setItem('salespulse_reps_config_v2', JSON.stringify(updatedReps));
+    } catch (e) {
+      console.error('Failed to save reps config to localStorage', e);
+    }
+  };
+
+  const handleResetRepsConfig = () => {
+    setRepsConfig(REPS_CONFIG);
+    try {
+      localStorage.removeItem('salespulse_reps_config_v2');
+      localStorage.removeItem('salespulse_reps_config');
+    } catch (e) {
+      console.error('Failed to remove saved reps config', e);
+    }
+  };
 
   // AI Executive Report State
   const [report, setReport] = useState<ExecutiveReport | null>(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
 
-  // Filter deals based on active filters
+  // Available unique months in loaded dataset
+  const availableMonths = useMemo(() => {
+    return getAvailableMonths(deals);
+  }, [deals]);
+
+  // Dynamic categories from loaded deals
+  const availableCategories = useMemo(() => {
+    return Array.from(new Set(deals.map(d => d.category))).filter(Boolean);
+  }, [deals]);
+
+  // Filter deals based on active filters (Region, Category, TimePeriod)
   const filteredDeals = useMemo(() => {
+    return deals.filter(deal => {
+      if (selectedRegion !== 'ALL' && deal.region !== selectedRegion) return false;
+      if (selectedCategory !== 'ALL' && deal.category !== selectedCategory) return false;
+      if (selectedTimePeriod !== 'ALL' && !deal.date.startsWith(selectedTimePeriod)) return false;
+      return true;
+    });
+  }, [deals, selectedRegion, selectedCategory, selectedTimePeriod]);
+
+  // Deals filtered by Region & Category across all 12 months (for MoM calculations)
+  const categoryAndRegionFilteredDeals = useMemo(() => {
     return deals.filter(deal => {
       if (selectedRegion !== 'ALL' && deal.region !== selectedRegion) return false;
       if (selectedCategory !== 'ALL' && deal.category !== selectedCategory) return false;
@@ -50,10 +112,16 @@ export default function App() {
     });
   }, [deals, selectedRegion, selectedCategory]);
 
-  // Compute comprehensive metrics
+  // Compute comprehensive metrics with full context and dynamic rep quotas
   const metrics = useMemo(() => {
-    return computeSalesMetrics(filteredDeals, REPS_CONFIG);
-  }, [filteredDeals]);
+    return computeSalesMetrics(filteredDeals, repsConfig, {
+      stageFilter: selectedStage,
+      timePeriod: selectedTimePeriod,
+      allUnfilteredDeals: deals,
+      selectedCategory,
+      selectedRegion,
+    });
+  }, [filteredDeals, repsConfig, deals, selectedStage, selectedTimePeriod, selectedCategory, selectedRegion]);
 
   // Generate executive summary via server-side Gemini API
   const handleGenerateReport = async (tone = 'executive') => {
@@ -63,19 +131,27 @@ export default function App() {
         focusArea: selectedCategory !== 'ALL' ? `Category: ${selectedCategory}` : 'Full Portfolio',
         tone,
         datasetSummary: {
-          period: 'Current Month (October 2026)',
-          totalRevenueWonUSD: metrics.totalRevenue,
+          period: metrics.periodLabel,
+          stageMeasured: selectedStage,
+          totalRevenueUSD: metrics.totalRevenue,
+          wonRevenueUSD: metrics.wonRevenue,
+          pipelineRevenueUSD: metrics.pipelineRevenue,
+          lostRevenueUSD: metrics.lostRevenue,
           teamQuotaAttainmentPct: metrics.totalQuotaAttainment,
           winRatePct: metrics.winRate,
           avgDealSizeUSD: metrics.avgDealSize,
-          avgDiscountPct: metrics.avgDiscount,
+          avgDiscountPct: metrics.avgDiscountWon,
+          avgDiscountWonPct: metrics.avgDiscountWon,
+          avgDiscountAllPct: metrics.avgDiscountAll,
           avgSalesCycleDays: metrics.avgSalesCycleDays,
+          momChange: metrics.filterMoMChange,
           regionalBreakdown: metrics.regionalSummaries.map(r => ({
             region: r.region,
             revenueWonUSD: r.revenue,
             quotaAttainmentPct: r.quotaAttainment,
             winRatePct: r.winRate,
-            avgDiscountPct: r.avgDiscount,
+            avgDiscountWonPct: r.avgDiscountWon,
+            avgDiscountAllPct: r.avgDiscountAll,
             topProduct: r.topProduct,
             topRep: r.topRep,
           })),
@@ -93,7 +169,8 @@ export default function App() {
             quotaAttainmentPct: r.quotaAttainment,
             gapToQuotaUSD: r.quota - r.revenue,
             dealsLost: r.dealsLost,
-            avgDiscountPct: r.avgDiscount,
+            avgDiscountPct: r.avgDiscountWon,
+            avgDiscountAllPct: r.avgDiscountAll,
           })),
           topRevenueProducts: metrics.topProducts.map(p => ({
             product: p.product,
@@ -126,14 +203,14 @@ export default function App() {
       }
     } catch (err: any) {
       console.error('Failed to generate report:', err);
-      // Fallback local report generation in case server is unavailable
+      // Fallback local report generation
       setReport({
-        headline: `Team achieves ${metrics.totalQuotaAttainment}% quota with ${metrics.topPerformers.length} reps exceeding targets while ${metrics.laggingReps.length} require coaching.`,
-        executiveOverview: `During this monthly review cycle, total closed won revenue reached ${metrics.totalRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} across ${metrics.totalDealsWon} deals with a ${metrics.winRate}% win rate. US performance led overall volume, while high average deal sizes in Europe bolstered Cloud and Security revenues. Attention is required on discount discipline in lagging reps.`,
+        headline: `Scope: ${metrics.periodLabel} · Closed Won Revenue reaches ${formatFullCurrency(metrics.wonRevenue)} with ${metrics.winRate}% win rate across ${metrics.totalDealsWon} deals.`,
+        executiveOverview: `During ${metrics.periodLabel}, closed won revenue stood at ${formatFullCurrency(metrics.wonRevenue)}, while active pipeline accounts for ${formatFullCurrency(metrics.pipelineRevenue)} across ${metrics.totalDealsPipeline} opportunities. Regionally, ${metrics.regionalSummaries[0]?.region || 'US'} led volume. Disciplinary focus is advised on discount rates exceeding 10% on Enterprise deals.`,
         regionalBreakdown: metrics.regionalSummaries.map(r => ({
           region: r.region,
           verdict: r.quotaAttainment >= 100 ? 'Overperforming' : r.quotaAttainment >= 80 ? 'On Track' : 'Underperforming',
-          commentary: `${r.region} attained ${r.quotaAttainment}% of target with ${r.dealsWon} won deals. ${r.topRep} led production.`,
+          commentary: `${r.region} recorded ${formatCurrency(r.revenue)} in won revenue across ${r.dealsWon} won deals. ${r.topRep} is top producer.`,
         })),
         topPerformers: metrics.topPerformers.map(r => ({
           name: r.name,
@@ -149,7 +226,7 @@ export default function App() {
         productInsights: metrics.categorySummaries.map(c => ({
           category: c.category,
           status: `${c.winRate}% Win Rate`,
-          observation: `Generated ${c.revenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} across ${c.dealsWon} won deals.`,
+          observation: `Generated ${formatCurrency(c.revenue)} across ${c.dealsWon} won deals.`,
         })),
         managerActionItems: [
           'Schedule 1-on-1 pipeline audits with reps under 75% quota attainment.',
@@ -175,7 +252,12 @@ export default function App() {
     const payload = {
       question,
       datasetSummary: {
+        activeScope: metrics.periodLabel,
+        activeStage: selectedStage,
         totalRevenueUSD: metrics.totalRevenue,
+        wonRevenueUSD: metrics.wonRevenue,
+        pipelineRevenueUSD: metrics.pipelineRevenue,
+        lostRevenueUSD: metrics.lostRevenue,
         quotaAttainmentPct: metrics.totalQuotaAttainment,
         winRatePct: metrics.winRate,
         regionalPerformance: metrics.regionalSummaries,
@@ -200,7 +282,7 @@ export default function App() {
   };
 
   // Rep coaching shortcut from leaderboard
-  const handleRepCoachingRequest = (rep: RepSummary) => {
+  const handleRepCoachingRequest = (_rep: RepSummary) => {
     const el = document.getElementById('ask-ai');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -209,16 +291,8 @@ export default function App() {
 
   // Handle sample dataset download
   const handleDownloadSample = () => {
-    // Fetch the sample CSV from /public or export current deals
-    fetch('/sample_sales_data.csv')
-      .then(res => res.text())
-      .then(csv => {
-        triggerDownload(csv, 'saas_sales_sample_dataset.csv');
-      })
-      .catch(() => {
-        // Fallback: direct browser trigger
-        window.open('/sample_sales_data.csv', '_blank');
-      });
+    const csvContent = exportDealsToCSV(deals);
+    triggerDownload(csvContent, 'saas_sales_1year_dataset.csv');
   };
 
   // Load custom spreadsheet data
@@ -226,16 +300,20 @@ export default function App() {
     setDeals(newDeals);
     setDatasetName(name);
     setIsCustomDataset(true);
-    setReport(null); // invalidate previous AI report for new dataset
+    setSelectedTimePeriod('ALL');
+    setSelectedStage('Closed Won');
+    setReport(null);
   };
 
   // Reset to default master dataset
   const handleResetToDefault = () => {
     setDeals(SAMPLE_DEALS);
-    setDatasetName('Master SaaS Dataset (Europe, Asia, US · 20 Products)');
+    setDatasetName('Master SaaS Dataset (1 Year · Europe, Asia, US · 7 Categories · 39 Products)');
     setIsCustomDataset(false);
     setSelectedRegion('ALL');
     setSelectedCategory('ALL');
+    setSelectedStage('Closed Won');
+    setSelectedTimePeriod('ALL');
     setReport(null);
   };
 
@@ -247,6 +325,7 @@ export default function App() {
         onOpenReport={handleOpenReportModal}
         onOpenShare={() => setIsShareOpen(true)}
         onDownloadSample={handleDownloadSample}
+        onOpenTargetSettings={() => setIsTargetSettingsOpen(true)}
         isAiGenerating={isGeneratingReport}
       />
 
@@ -260,13 +339,41 @@ export default function App() {
           onSelectRegion={setSelectedRegion}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
+          selectedStage={selectedStage}
+          onSelectStage={setSelectedStage}
+          selectedTimePeriod={selectedTimePeriod}
+          onSelectTimePeriod={setSelectedTimePeriod}
+          availableMonths={availableMonths}
+          availableCategories={availableCategories}
           activeDatasetName={datasetName}
           onResetToDefault={handleResetToDefault}
           isCustomDataset={isCustomDataset}
         />
 
-        {/* Executive KPI Summary Strip */}
-        <KPICards metrics={metrics} />
+        {/* Executive KPI Summary Strip with Stage Transparency & Real MoM Math */}
+        <KPICards 
+          metrics={metrics}
+          selectedCategory={selectedCategory}
+          selectedRegion={selectedRegion}
+          selectedStage={selectedStage}
+          selectedTimePeriod={selectedTimePeriod}
+          onOpenTargetSettings={() => setIsTargetSettingsOpen(true)}
+        />
+
+        {/* Month-over-Month (MoM) Shift Highlights */}
+        <MonthOverMonthBanner 
+          deals={categoryAndRegionFilteredDeals}
+          selectedCategory={selectedCategory}
+          selectedRegion={selectedRegion}
+          selectedTimePeriod={selectedTimePeriod}
+          onSelectMonth={(m) => setSelectedTimePeriod(m)}
+        />
+
+        {/* Weekly Trend Curve: Top N Products */}
+        <ProductTrendChart deals={filteredDeals} />
+
+        {/* Weekly Trend Curve: Top N Sales Reps */}
+        <RepTrendChart deals={filteredDeals} />
 
         {/* Section 1: Which regions are performing best? */}
         <RegionalInsights
@@ -299,10 +406,10 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span>SalesPulse Analytics Engine</span>
             <span>·</span>
-            <span>Monthly Performance Review Dashboard</span>
+            <span>Monthly & Annual Performance Review Dashboard</span>
           </div>
           <div className="text-[11px] text-slate-600 font-mono">
-            Europe · Asia · US Regions · 4 Categories · 20 SaaS Products
+            Europe · Asia · US Regions · 7 Categories · 39 SaaS Products · 52-Week Resolution
           </div>
         </div>
       </footer>
@@ -331,6 +438,14 @@ export default function App() {
         selectedMetric={selectedMetric}
         selectedRegion={selectedRegion}
         selectedCategory={selectedCategory}
+      />
+
+      <TargetSettingsModal
+        isOpen={isTargetSettingsOpen}
+        onClose={() => setIsTargetSettingsOpen(false)}
+        repsConfig={repsConfig}
+        onSaveRepsConfig={handleSaveRepsConfig}
+        onResetToDefault={handleResetRepsConfig}
       />
     </div>
   );

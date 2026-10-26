@@ -192,8 +192,8 @@ export const RepLeaderboard: React.FC<RepLeaderboardProps> = ({
                     <div className="flex items-center gap-3 text-slate-400 font-mono">
                       <span>{rep.dealsLost} lost</span>
                       <span>·</span>
-                      <span className={rep.avgDiscount > 12 ? 'text-amber-400' : ''}>
-                        {rep.avgDiscount}% avg discount
+                      <span className={rep.avgDiscountWon > 12 ? 'text-amber-400' : ''}>
+                        {rep.avgDiscountWon}% discount (Won)
                       </span>
                       <span>·</span>
                       <span>{rep.avgCycleDays}d cycle</span>
@@ -268,9 +268,10 @@ export const RepLeaderboard: React.FC<RepLeaderboardProps> = ({
                 <th 
                   className="py-3 px-3 text-right cursor-pointer hover:text-white"
                   onClick={() => handleSort('avgDiscount')}
+                  title="Gennemsnitlig rabat på vundne handler (Won) · Viser også rabat på alle handler (inkl. Lost)"
                 >
                   <span className="inline-flex items-center gap-1">
-                    Avg Disc.
+                    Avg Disc. (Won)
                     <ArrowUpDown className="w-3 h-3" />
                   </span>
                 </th>
@@ -314,8 +315,13 @@ export const RepLeaderboard: React.FC<RepLeaderboardProps> = ({
                     <td className="py-3 px-3 text-right text-slate-300">
                       {rep.winRate}%
                     </td>
-                    <td className={`py-3 px-3 text-right ${rep.avgDiscount > 12 ? 'text-amber-400 font-semibold' : 'text-slate-400'}`}>
-                      {rep.avgDiscount}%
+                    <td className="py-3 px-3 text-right">
+                      <span className={rep.avgDiscountWon > 12 ? 'text-amber-400 font-semibold' : 'text-slate-300'}>
+                        {rep.avgDiscountWon}%
+                      </span>
+                      <span className="text-[10px] text-slate-500 block font-normal font-mono" title={`Alle stages rabat: ${rep.avgDiscountAll}%`}>
+                        {rep.avgDiscountAll}% alle
+                      </span>
                     </td>
                     <td className="py-3 px-3 text-right text-slate-400">
                       {rep.avgCycleDays}d

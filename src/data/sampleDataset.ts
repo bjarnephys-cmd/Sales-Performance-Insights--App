@@ -1,29 +1,33 @@
-import { Deal, SalesRepProfile } from '../types/sales';
+import { Deal, SalesRepProfile, Region, ProductCategory, DealStage } from '../types/sales';
 
 export const REPS_CONFIG: SalesRepProfile[] = [
-  { name: 'Marcus Vance', region: 'US', quota: 180000, avatarInitials: 'MV' },
-  { name: 'Sarah Chen', region: 'US', quota: 160000, avatarInitials: 'SC' },
-  { name: 'David Miller', region: 'US', quota: 170000, avatarInitials: 'DM' },
-  { name: 'Maya Rodriguez', region: 'US', quota: 140000, avatarInitials: 'MR' },
+  // US Region (Annual: 1.8M + 1.6M + 1.7M + 1.4M = 6.50M/år · Måned: 0.5417M/md)
+  { name: 'Marcus Vance', region: 'US', annualQuota: 1800000, quota: 150000, avatarInitials: 'MV' },
+  { name: 'Sarah Chen', region: 'US', annualQuota: 1600000, quota: 133333, avatarInitials: 'SC' },
+  { name: 'David Miller', region: 'US', annualQuota: 1700000, quota: 141667, avatarInitials: 'DM' },
+  { name: 'Maya Rodriguez', region: 'US', annualQuota: 1400000, quota: 116667, avatarInitials: 'MR' },
 
-  { name: 'Elena Rossi', region: 'Europe', quota: 175000, avatarInitials: 'ER' },
-  { name: 'Arthur Dubois', region: 'Europe', quota: 150000, avatarInitials: 'AD' },
-  { name: 'Liam Schmidt', region: 'Europe', quota: 155000, avatarInitials: 'LS' },
-  { name: 'Freja Lind', region: 'Europe', quota: 135000, avatarInitials: 'FL' },
+  // Europe Region (Annual: 1.75M + 1.50M + 1.55M + 1.35M = 6.15M/år · Måned: 0.5125M/md)
+  { name: 'Elena Rossi', region: 'Europe', annualQuota: 1750000, quota: 145833, avatarInitials: 'ER' },
+  { name: 'Arthur Dubois', region: 'Europe', annualQuota: 1500000, quota: 125000, avatarInitials: 'AD' },
+  { name: 'Liam Schmidt', region: 'Europe', annualQuota: 1550000, quota: 129167, avatarInitials: 'LS' },
+  { name: 'Freja Lind', region: 'Europe', annualQuota: 1350000, quota: 112500, avatarInitials: 'FL' },
 
-  { name: 'Kenji Tanaka', region: 'Asia', quota: 165000, avatarInitials: 'KT' },
-  { name: 'Priya Sharma', region: 'Asia', quota: 145000, avatarInitials: 'PS' },
-  { name: 'Wei Zhang', region: 'Asia', quota: 150000, avatarInitials: 'WZ' },
-  { name: 'Aiko Takahashi', region: 'Asia', quota: 130000, avatarInitials: 'AT' },
+  // Asia Region (Annual: 1.65M + 1.45M + 1.50M + 1.30M = 5.90M/år · Måned: 0.4917M/md)
+  { name: 'Kenji Tanaka', region: 'Asia', annualQuota: 1650000, quota: 137500, avatarInitials: 'KT' },
+  { name: 'Priya Sharma', region: 'Asia', annualQuota: 1450000, quota: 120833, avatarInitials: 'PS' },
+  { name: 'Wei Zhang', region: 'Asia', annualQuota: 1500000, quota: 125000, avatarInitials: 'WZ' },
+  { name: 'Aiko Takahashi', region: 'Asia', annualQuota: 1300000, quota: 108333, avatarInitials: 'AT' },
 ];
 
-export const CATEGORIES_WITH_PRODUCTS = {
+export const CATEGORIES_WITH_PRODUCTS: Record<string, string[]> = {
   'Cloud & Infrastructure': [
     'CloudScale Engine',
     'Edge CDN Accelerator',
     'Kubernetes Fleet Manager',
     'Serverless Flow Runtime',
     'Database Cluster Pro',
+    'Cloud Cost Optimizer',
   ],
   'Security & Compliance': [
     'ZeroTrust Access Gateway',
@@ -31,6 +35,7 @@ export const CATEGORIES_WITH_PRODUCTS = {
     'Compliance Vault Enterprise',
     'API Sentinel Guard',
     'Identity Governance Suite',
+    'Vulnerability Radar X',
   ],
   'AI & Data Intelligence': [
     'Cognitive Copilot Studio',
@@ -38,6 +43,7 @@ export const CATEGORIES_WITH_PRODUCTS = {
     'DocuExtract Neural OCR',
     'VoiceStream Speech AI',
     'Predictive Churn Engine',
+    'Vector Lake Search',
   ],
   'Collaboration & Workflows': [
     'TeamSync Workspace Pro',
@@ -45,762 +51,176 @@ export const CATEGORIES_WITH_PRODUCTS = {
     'CustomerPortal Connect',
     'DocuSignify Enterprise',
     'OmniChannel Desk',
+    'Async Video HQ',
   ],
-} as const;
+  'Analytics & BI Intelligence': [
+    'Executive KPI Dashboard',
+    'Customer Journey Explorer',
+    'Realtime Event Streamer',
+    'Financial Forecaster AI',
+    'Metric Attribution Suite',
+  ],
+  'Customer Success & Retention': [
+    'ChurnGuard Early Warning',
+    'Onboarding Playbook Pro',
+    'NPS & Sentiment Pulse',
+    'Ticket Escalation Bot',
+    'Account Health Matrix',
+  ],
+  'Developer Platforms & APIs': [
+    'API Gateway Mesh',
+    'Webhook Dispatcher Pro',
+    'Sandbox Environment Cloud',
+    'Schema Registry Enterprise',
+    'SDK Generator Suite',
+  ],
+};
 
-export const SAMPLE_DEALS: Deal[] = [
-  // --- US REGION ---
-  // Marcus Vance (Top AE, crushes Cloud & AI)
-  {
-    id: 'DL-US-101',
-    date: '2026-10-02',
-    salesPerson: 'Marcus Vance',
-    region: 'US',
-    category: 'Cloud & Infrastructure',
-    product: 'CloudScale Engine',
-    stage: 'Closed Won',
-    revenue: 68000,
-    discountPct: 5,
-    salesCycleDays: 28,
-    accountName: 'Horizon Fintech',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-102',
-    date: '2026-10-06',
-    salesPerson: 'Marcus Vance',
-    region: 'US',
-    category: 'AI & Data Intelligence',
-    product: 'Cognitive Copilot Studio',
-    stage: 'Closed Won',
-    revenue: 74000,
-    discountPct: 8,
-    salesCycleDays: 32,
-    accountName: 'Aegis Healthcare',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-103',
-    date: '2026-10-12',
-    salesPerson: 'Marcus Vance',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'ZeroTrust Access Gateway',
-    stage: 'Closed Won',
-    revenue: 45000,
-    discountPct: 4,
-    salesCycleDays: 22,
-    accountName: 'Beacon Logistics',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-104',
-    date: '2026-10-17',
-    salesPerson: 'Marcus Vance',
-    region: 'US',
-    category: 'Cloud & Infrastructure',
-    product: 'Kubernetes Fleet Manager',
-    stage: 'Closed Won',
-    revenue: 38000,
-    discountPct: 6,
-    salesCycleDays: 24,
-    accountName: 'Silverline Media',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-105',
-    date: '2026-10-20',
-    salesPerson: 'Marcus Vance',
-    region: 'US',
-    category: 'AI & Data Intelligence',
-    product: 'AutoPipeline ML Ops',
-    stage: 'Closed Lost',
-    revenue: 52000,
-    discountPct: 15,
-    salesCycleDays: 45,
-    accountName: 'Quantum Capital',
-    tier: 'Enterprise',
-  },
+// Deterministic Pseudo-Random Generator (Mulberry32) for reproducible 1-year data
+function createPrng(seed: number) {
+  let s = seed;
+  return function () {
+    s |= 0;
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
-  // Sarah Chen (Consistent high win-rate AE)
-  {
-    id: 'DL-US-106',
-    date: '2026-10-03',
-    salesPerson: 'Sarah Chen',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'ThreatShield SIEM',
-    stage: 'Closed Won',
-    revenue: 62000,
-    discountPct: 6,
-    salesCycleDays: 26,
-    accountName: 'BioHealth Labs',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-107',
-    date: '2026-10-08',
-    salesPerson: 'Sarah Chen',
-    region: 'US',
-    category: 'AI & Data Intelligence',
-    product: 'Cognitive Copilot Studio',
-    stage: 'Closed Won',
-    revenue: 58000,
-    discountPct: 5,
-    salesCycleDays: 21,
-    accountName: 'Strata Commerce',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-108',
-    date: '2026-10-14',
-    salesPerson: 'Sarah Chen',
-    region: 'US',
-    category: 'Cloud & Infrastructure',
-    product: 'Database Cluster Pro',
-    stage: 'Closed Won',
-    revenue: 44000,
-    discountPct: 4,
-    salesCycleDays: 19,
-    accountName: 'Optima Retail Systems',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-109',
-    date: '2026-10-18',
-    salesPerson: 'Sarah Chen',
-    region: 'US',
-    category: 'Collaboration & Workflows',
-    product: 'TeamSync Workspace Pro',
-    stage: 'Closed Won',
-    revenue: 28000,
-    discountPct: 0,
-    salesCycleDays: 14,
-    accountName: 'Vertex Design Group',
-    tier: 'Scale-Up',
-  },
-  {
-    id: 'DL-US-110',
-    date: '2026-10-21',
-    salesPerson: 'Sarah Chen',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'API Sentinel Guard',
-    stage: 'In Pipeline',
-    revenue: 35000,
-    discountPct: 8,
-    salesCycleDays: 18,
-    accountName: 'NextGen Payments',
-    tier: 'Mid-Market',
-  },
-
-  // Maya Rodriguez (Mid-Market target hit)
-  {
-    id: 'DL-US-111',
-    date: '2026-10-04',
-    salesPerson: 'Maya Rodriguez',
-    region: 'US',
-    category: 'Collaboration & Workflows',
-    product: 'CustomerPortal Connect',
-    stage: 'Closed Won',
-    revenue: 34000,
-    discountPct: 7,
-    salesCycleDays: 18,
-    accountName: 'Kite Logistics',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-112',
-    date: '2026-10-09',
-    salesPerson: 'Maya Rodriguez',
-    region: 'US',
-    category: 'Collaboration & Workflows',
-    product: 'DocuSignify Enterprise',
-    stage: 'Closed Won',
-    revenue: 31000,
-    discountPct: 5,
-    salesCycleDays: 16,
-    accountName: 'Pinnacle Legal Services',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-113',
-    date: '2026-10-13',
-    salesPerson: 'Maya Rodriguez',
-    region: 'US',
-    category: 'Cloud & Infrastructure',
-    product: 'Serverless Flow Runtime',
-    stage: 'Closed Won',
-    revenue: 42000,
-    discountPct: 10,
-    salesCycleDays: 25,
-    accountName: 'StreamWave Gaming',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-114',
-    date: '2026-10-17',
-    salesPerson: 'Maya Rodriguez',
-    region: 'US',
-    category: 'AI & Data Intelligence',
-    product: 'VoiceStream Speech AI',
-    stage: 'Closed Won',
-    revenue: 37000,
-    discountPct: 8,
-    salesCycleDays: 22,
-    accountName: 'Elevate Telephony',
-    tier: 'Scale-Up',
-  },
-  {
-    id: 'DL-US-115',
-    date: '2026-10-22',
-    salesPerson: 'Maya Rodriguez',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'ThreatShield SIEM',
-    stage: 'Closed Lost',
-    revenue: 40000,
-    discountPct: 18,
-    salesCycleDays: 38,
-    accountName: 'Solaris Energy',
-    tier: 'Mid-Market',
-  },
-
-  // David Miller (US rep falling behind! Low attainment, high discount, lost deals)
-  {
-    id: 'DL-US-116',
-    date: '2026-10-05',
-    salesPerson: 'David Miller',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'Identity Governance Suite',
-    stage: 'Closed Lost',
-    revenue: 72000,
-    discountPct: 22,
-    salesCycleDays: 58,
-    accountName: 'Pacific Rim Bank',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-117',
-    date: '2026-10-11',
-    salesPerson: 'David Miller',
-    region: 'US',
-    category: 'Cloud & Infrastructure',
-    product: 'Edge CDN Accelerator',
-    stage: 'Closed Won',
-    revenue: 32000,
-    discountPct: 18,
-    salesCycleDays: 42,
-    accountName: 'Metro Broadcast Inc',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-US-118',
-    date: '2026-10-15',
-    salesPerson: 'David Miller',
-    region: 'US',
-    category: 'AI & Data Intelligence',
-    product: 'DocuExtract Neural OCR',
-    stage: 'Closed Lost',
-    revenue: 48000,
-    discountPct: 20,
-    salesCycleDays: 49,
-    accountName: 'Cascade Mutual Insurers',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-US-119',
-    date: '2026-10-19',
-    salesPerson: 'David Miller',
-    region: 'US',
-    category: 'Collaboration & Workflows',
-    product: 'DevKanban Agile Hub',
-    stage: 'Closed Won',
-    revenue: 22000,
-    discountPct: 14,
-    salesCycleDays: 31,
-    accountName: 'AppWorks Studio',
-    tier: 'Scale-Up',
-  },
-  {
-    id: 'DL-US-120',
-    date: '2026-10-22',
-    salesPerson: 'David Miller',
-    region: 'US',
-    category: 'Security & Compliance',
-    product: 'Compliance Vault Enterprise',
-    stage: 'In Pipeline',
-    revenue: 55000,
-    discountPct: 12,
-    salesCycleDays: 40,
-    accountName: 'Apex Health Systems',
-    tier: 'Enterprise',
-  },
-
-  // --- EUROPE REGION ---
-  // Elena Rossi (Top Performer EMEA, massive enterprise deals in DACH & Southern Europe)
-  {
-    id: 'DL-EU-201',
-    date: '2026-10-02',
-    salesPerson: 'Elena Rossi',
-    region: 'Europe',
-    category: 'Security & Compliance',
-    product: 'Compliance Vault Enterprise',
-    stage: 'Closed Won',
-    revenue: 78000,
-    discountPct: 4,
-    salesCycleDays: 34,
-    accountName: 'Milano Assicurazioni',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-202',
-    date: '2026-10-07',
-    salesPerson: 'Elena Rossi',
-    region: 'Europe',
-    category: 'Cloud & Infrastructure',
-    product: 'CloudScale Engine',
-    stage: 'Closed Won',
-    revenue: 72000,
-    discountPct: 5,
-    salesCycleDays: 29,
-    accountName: 'Swiss Alpine Tech AG',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-203',
-    date: '2026-10-14',
-    salesPerson: 'Elena Rossi',
-    region: 'Europe',
-    category: 'AI & Data Intelligence',
-    product: 'Cognitive Copilot Studio',
-    stage: 'Closed Won',
-    revenue: 56000,
-    discountPct: 6,
-    salesCycleDays: 24,
-    accountName: 'Bavaria Motor Components',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-204',
-    date: '2026-10-19',
-    salesPerson: 'Elena Rossi',
-    region: 'Europe',
-    category: 'Security & Compliance',
-    product: 'ZeroTrust Access Gateway',
-    stage: 'Closed Lost',
-    revenue: 48000,
-    discountPct: 10,
-    salesCycleDays: 37,
-    accountName: 'Iberia Telecom',
-    tier: 'Enterprise',
-  },
-
-  // Arthur Dubois (Solid, steady performer in France/Benelux)
-  {
-    id: 'DL-EU-205',
-    date: '2026-10-04',
-    salesPerson: 'Arthur Dubois',
-    region: 'Europe',
-    category: 'Cloud & Infrastructure',
-    product: 'Database Cluster Pro',
-    stage: 'Closed Won',
-    revenue: 52000,
-    discountPct: 7,
-    salesCycleDays: 25,
-    accountName: 'Lille Logistics Hub',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-206',
-    date: '2026-10-10',
-    salesPerson: 'Arthur Dubois',
-    region: 'Europe',
-    category: 'Collaboration & Workflows',
-    product: 'CustomerPortal Connect',
-    stage: 'Closed Won',
-    revenue: 41000,
-    discountPct: 6,
-    salesCycleDays: 21,
-    accountName: 'Bruxelles Public Services',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-EU-207',
-    date: '2026-10-15',
-    salesPerson: 'Arthur Dubois',
-    region: 'Europe',
-    category: 'AI & Data Intelligence',
-    product: 'AutoPipeline ML Ops',
-    stage: 'Closed Won',
-    revenue: 46000,
-    discountPct: 8,
-    salesCycleDays: 27,
-    accountName: 'AeroParis Engineering',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-EU-208',
-    date: '2026-10-21',
-    salesPerson: 'Arthur Dubois',
-    region: 'Europe',
-    category: 'Collaboration & Workflows',
-    product: 'OmniChannel Desk',
-    stage: 'Closed Won',
-    revenue: 29000,
-    discountPct: 5,
-    salesCycleDays: 16,
-    accountName: 'GrandMagasin eCommerce',
-    tier: 'Scale-Up',
-  },
-
-  // Liam Schmidt (Moderate DACH rep, solid tech deals)
-  {
-    id: 'DL-EU-209',
-    date: '2026-10-03',
-    salesPerson: 'Liam Schmidt',
-    region: 'Europe',
-    category: 'Cloud & Infrastructure',
-    product: 'Kubernetes Fleet Manager',
-    stage: 'Closed Won',
-    revenue: 48000,
-    discountPct: 8,
-    salesCycleDays: 30,
-    accountName: 'Frankfurt Digital Bank',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-210',
-    date: '2026-10-09',
-    salesPerson: 'Liam Schmidt',
-    region: 'Europe',
-    category: 'Security & Compliance',
-    product: 'ThreatShield SIEM',
-    stage: 'Closed Won',
-    revenue: 55000,
-    discountPct: 7,
-    salesCycleDays: 28,
-    accountName: 'Dusseldorf Steel Corp',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-211',
-    date: '2026-10-16',
-    salesPerson: 'Liam Schmidt',
-    region: 'Europe',
-    category: 'AI & Data Intelligence',
-    product: 'Predictive Churn Engine',
-    stage: 'Closed Won',
-    revenue: 36000,
-    discountPct: 5,
-    salesCycleDays: 23,
-    accountName: 'Stuttgart Mobility Labs',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-EU-212',
-    date: '2026-10-20',
-    salesPerson: 'Liam Schmidt',
-    region: 'Europe',
-    category: 'Cloud & Infrastructure',
-    product: 'Serverless Flow Runtime',
-    stage: 'Closed Lost',
-    revenue: 34000,
-    discountPct: 12,
-    salesCycleDays: 35,
-    accountName: 'Vienna Cloud Services',
-    tier: 'Mid-Market',
-  },
-
-  // Freja Lind (EMEA rep falling behind! Low attainment, only 1 won deal)
-  {
-    id: 'DL-EU-213',
-    date: '2026-10-05',
-    salesPerson: 'Freja Lind',
-    region: 'Europe',
-    category: 'AI & Data Intelligence',
-    product: 'DocuExtract Neural OCR',
-    stage: 'Closed Lost',
-    revenue: 42000,
-    discountPct: 16,
-    salesCycleDays: 44,
-    accountName: 'Nordic Forest Products',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-EU-214',
-    date: '2026-10-11',
-    salesPerson: 'Freja Lind',
-    region: 'Europe',
-    category: 'Collaboration & Workflows',
-    product: 'TeamSync Workspace Pro',
-    stage: 'Closed Won',
-    revenue: 33000,
-    discountPct: 6,
-    salesCycleDays: 20,
-    accountName: 'Stockholm Fintech AB',
-    tier: 'Scale-Up',
-  },
-  {
-    id: 'DL-EU-215',
-    date: '2026-10-17',
-    salesPerson: 'Freja Lind',
-    region: 'Europe',
-    category: 'Security & Compliance',
-    product: 'API Sentinel Guard',
-    stage: 'Closed Lost',
-    revenue: 38000,
-    discountPct: 15,
-    salesCycleDays: 48,
-    accountName: 'Helsinki Cargo Lines',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-EU-216',
-    date: '2026-10-21',
-    salesPerson: 'Freja Lind',
-    region: 'Europe',
-    category: 'Cloud & Infrastructure',
-    product: 'Edge CDN Accelerator',
-    stage: 'Closed Won',
-    revenue: 29000,
-    discountPct: 10,
-    salesCycleDays: 32,
-    accountName: 'Oslo Media Group',
-    tier: 'Mid-Market',
-  },
-
-  // --- ASIA REGION ---
-  // Kenji Tanaka (Top AE APAC, Japan & Korea enterprise AI deals)
-  {
-    id: 'DL-AS-301',
-    date: '2026-10-01',
-    salesPerson: 'Kenji Tanaka',
-    region: 'Asia',
-    category: 'AI & Data Intelligence',
-    product: 'Cognitive Copilot Studio',
-    stage: 'Closed Won',
-    revenue: 82000,
-    discountPct: 3,
-    salesCycleDays: 26,
-    accountName: 'Tokyo Precision Robotics',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-302',
-    date: '2026-10-06',
-    salesPerson: 'Kenji Tanaka',
-    region: 'Asia',
-    category: 'Cloud & Infrastructure',
-    product: 'CloudScale Engine',
-    stage: 'Closed Won',
-    revenue: 64000,
-    discountPct: 5,
-    salesCycleDays: 28,
-    accountName: 'Osaka Chemical Systems',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-303',
-    date: '2026-10-13',
-    salesPerson: 'Kenji Tanaka',
-    region: 'Asia',
-    category: 'Security & Compliance',
-    product: 'ZeroTrust Access Gateway',
-    stage: 'Closed Won',
-    revenue: 46000,
-    discountPct: 4,
-    salesCycleDays: 20,
-    accountName: 'Seoul Semiconductor',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-304',
-    date: '2026-10-18',
-    salesPerson: 'Kenji Tanaka',
-    region: 'Asia',
-    category: 'AI & Data Intelligence',
-    product: 'AutoPipeline ML Ops',
-    stage: 'Closed Won',
-    revenue: 39000,
-    discountPct: 6,
-    salesCycleDays: 22,
-    accountName: 'Yokohama Smart Transit',
-    tier: 'Mid-Market',
-  },
-
-  // Priya Sharma (India & SE Asia, fast mid-market deal velocity)
-  {
-    id: 'DL-AS-305',
-    date: '2026-10-04',
-    salesPerson: 'Priya Sharma',
-    region: 'Asia',
-    category: 'Collaboration & Workflows',
-    product: 'CustomerPortal Connect',
-    stage: 'Closed Won',
-    revenue: 38000,
-    discountPct: 8,
-    salesCycleDays: 17,
-    accountName: 'Bengaluru Tech Park',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-306',
-    date: '2026-10-09',
-    salesPerson: 'Priya Sharma',
-    region: 'Asia',
-    category: 'Collaboration & Workflows',
-    product: 'DocuSignify Enterprise',
-    stage: 'Closed Won',
-    revenue: 33000,
-    discountPct: 5,
-    salesCycleDays: 15,
-    accountName: 'Singapore Financial Network',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-AS-307',
-    date: '2026-10-14',
-    salesPerson: 'Priya Sharma',
-    region: 'Asia',
-    category: 'AI & Data Intelligence',
-    product: 'VoiceStream Speech AI',
-    stage: 'Closed Won',
-    revenue: 42000,
-    discountPct: 7,
-    salesCycleDays: 19,
-    accountName: 'Hyderabad Telecom',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-308',
-    date: '2026-10-19',
-    salesPerson: 'Priya Sharma',
-    region: 'Asia',
-    category: 'Cloud & Infrastructure',
-    product: 'Database Cluster Pro',
-    stage: 'Closed Won',
-    revenue: 39000,
-    discountPct: 9,
-    salesCycleDays: 23,
-    accountName: 'Jakarta eCommerce Express',
-    tier: 'Mid-Market',
-  },
-
-  // Wei Zhang (Greater China, strong infrastructure deals)
-  {
-    id: 'DL-AS-309',
-    date: '2026-10-03',
-    salesPerson: 'Wei Zhang',
-    region: 'Asia',
-    category: 'Cloud & Infrastructure',
-    product: 'CloudScale Engine',
-    stage: 'Closed Won',
-    revenue: 58000,
-    discountPct: 6,
-    salesCycleDays: 31,
-    accountName: 'Shenzhen Hardware Cloud',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-310',
-    date: '2026-10-08',
-    salesPerson: 'Wei Zhang',
-    region: 'Asia',
-    category: 'Cloud & Infrastructure',
-    product: 'Kubernetes Fleet Manager',
-    stage: 'Closed Won',
-    revenue: 47000,
-    discountPct: 7,
-    salesCycleDays: 27,
-    accountName: 'Shanghai Container Shipping',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-311',
-    date: '2026-10-15',
-    salesPerson: 'Wei Zhang',
-    region: 'Asia',
-    category: 'Security & Compliance',
-    product: 'ThreatShield SIEM',
-    stage: 'Closed Lost',
-    revenue: 52000,
-    discountPct: 14,
-    salesCycleDays: 45,
-    accountName: 'Guangzhou Commercial Bank',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-312',
-    date: '2026-10-21',
-    salesPerson: 'Wei Zhang',
-    region: 'Asia',
-    category: 'Collaboration & Workflows',
-    product: 'OmniChannel Desk',
-    stage: 'Closed Won',
-    revenue: 31000,
-    discountPct: 5,
-    salesCycleDays: 18,
-    accountName: 'Taipei Gaming Cloud',
-    tier: 'Scale-Up',
-  },
-
-  // Aiko Takahashi (APAC rep falling behind! Lowest quota attainment, stuck pipeline)
-  {
-    id: 'DL-AS-313',
-    date: '2026-10-04',
-    salesPerson: 'Aiko Takahashi',
-    region: 'Asia',
-    category: 'AI & Data Intelligence',
-    product: 'DocuExtract Neural OCR',
-    stage: 'Closed Lost',
-    revenue: 41000,
-    discountPct: 20,
-    salesCycleDays: 52,
-    accountName: 'Fukuoka Insurance Corp',
-    tier: 'Mid-Market',
-  },
-  {
-    id: 'DL-AS-314',
-    date: '2026-10-10',
-    salesPerson: 'Aiko Takahashi',
-    region: 'Asia',
-    category: 'Collaboration & Workflows',
-    product: 'DevKanban Agile Hub',
-    stage: 'Closed Won',
-    revenue: 19000,
-    discountPct: 15,
-    salesCycleDays: 34,
-    accountName: 'Kyoto Interactive Apps',
-    tier: 'Scale-Up',
-  },
-  {
-    id: 'DL-AS-315',
-    date: '2026-10-16',
-    salesPerson: 'Aiko Takahashi',
-    region: 'Asia',
-    category: 'Security & Compliance',
-    product: 'Identity Governance Suite',
-    stage: 'Closed Lost',
-    revenue: 60000,
-    discountPct: 22,
-    salesCycleDays: 61,
-    accountName: 'Manila Offshore Services',
-    tier: 'Enterprise',
-  },
-  {
-    id: 'DL-AS-316',
-    date: '2026-10-20',
-    salesPerson: 'Aiko Takahashi',
-    region: 'Asia',
-    category: 'Collaboration & Workflows',
-    product: 'TeamSync Workspace Pro',
-    stage: 'Closed Won',
-    revenue: 26000,
-    discountPct: 10,
-    salesCycleDays: 24,
-    accountName: 'Sapporo Creative Agency',
-    tier: 'Scale-Up',
-  },
+const ACCOUNTS = [
+  'Horizon Fintech', 'Aegis Healthcare', 'Beacon Logistics', 'Silverline Media',
+  'Quantum Capital', 'BioHealth Labs', 'Strata Commerce', 'Optima Retail Systems',
+  'Vertex Design Group', 'NextGen Payments', 'Kite Logistics', 'Pinnacle Legal Services',
+  'StreamWave Gaming', 'Elevate Telephony', 'Solaris Energy', 'Pacific Rim Bank',
+  'Metro Broadcast Inc', 'Cascade Mutual Insurers', 'AppWorks Studio', 'Apex Health Systems',
+  'Milano Assicurazioni', 'Swiss Alpine Tech AG', 'Bavaria Motor Components', 'Iberia Telecom',
+  'Lille Logistics Hub', 'Bruxelles Public Services', 'AeroParis Engineering', 'GrandMagasin eCommerce',
+  'Frankfurt Digital Bank', 'Dusseldorf Steel Corp', 'Stuttgart Mobility Labs', 'Vienna Cloud Services',
+  'Nordic Forest Products', 'Stockholm Fintech AB', 'Helsinki Cargo Lines', 'Oslo Media Group',
+  'Tokyo Precision Robotics', 'Osaka Chemical Systems', 'Seoul Semiconductor', 'Yokohama Smart Transit',
+  'Bengaluru Tech Park', 'Singapore Financial Network', 'Hyderabad Telecom', 'Jakarta eCommerce Express',
+  'Shenzhen Hardware Cloud', 'Shanghai Container Shipping', 'Guangzhou Commercial Bank', 'Taipei Gaming Cloud',
+  'Fukuoka Insurance Corp', 'Kyoto Interactive Apps', 'Manila Offshore Services', 'Sapporo Creative Agency'
 ];
+
+function generateOneYearDataset(): Deal[] {
+  const prng = createPrng(42);
+  const deals: Deal[] = [];
+
+  const startDate = new Date('2025-11-01');
+  const endDate = new Date('2026-10-24');
+  const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+  const allCategories = Object.keys(CATEGORIES_WITH_PRODUCTS);
+
+  // Rep profiles with win-rate bias and deal size bias
+  const repBiases: Record<string, { winRate: number; sizeMul: number; discAvg: number }> = {
+    'Marcus Vance': { winRate: 0.82, sizeMul: 1.35, discAvg: 6 },
+    'Sarah Chen': { winRate: 0.86, sizeMul: 1.15, discAvg: 5 },
+    'David Miller': { winRate: 0.44, sizeMul: 0.95, discAvg: 18 },
+    'Maya Rodriguez': { winRate: 0.72, sizeMul: 1.0, discAvg: 8 },
+
+    'Elena Rossi': { winRate: 0.84, sizeMul: 1.30, discAvg: 6 },
+    'Arthur Dubois': { winRate: 0.76, sizeMul: 1.10, discAvg: 7 },
+    'Liam Schmidt': { winRate: 0.73, sizeMul: 1.05, discAvg: 8 },
+    'Freja Lind': { winRate: 0.52, sizeMul: 0.90, discAvg: 14 },
+
+    'Kenji Tanaka': { winRate: 0.85, sizeMul: 1.25, discAvg: 5 },
+    'Priya Sharma': { winRate: 0.78, sizeMul: 0.95, discAvg: 8 },
+    'Wei Zhang': { winRate: 0.74, sizeMul: 1.15, discAvg: 8 },
+    'Aiko Takahashi': { winRate: 0.48, sizeMul: 0.85, discAvg: 16 },
+  };
+
+  let dealIndex = 1000;
+
+  // Generate ~520 realistic deals across the 52 weeks (approx 10-12 deals per week)
+  for (let dayOffset = 0; dayOffset <= totalDays; dayOffset += 1) {
+    const curDate = new Date(startDate.getTime() + dayOffset * 24 * 60 * 60 * 1000);
+    const dayOfWeek = curDate.getDay(); // 0 is Sunday, 6 is Saturday
+    if (dayOfWeek === 0 || dayOfWeek === 6) continue; // Skip weekends for B2B deal closings
+
+    // End-of-month and end-of-quarter volume push
+    const dayOfMonth = curDate.getDate();
+    const month = curDate.getMonth(); // 0-11
+    const isQuarterEnd = dayOfMonth >= 20 && (month === 2 || month === 5 || month === 8 || month === 9);
+    const isMonthEnd = dayOfMonth >= 22;
+
+    const dealsTodayCount = isQuarterEnd ? (prng() > 0.3 ? 3 : 2) : isMonthEnd ? (prng() > 0.4 ? 2 : 1) : (prng() > 0.55 ? 2 : 1);
+
+    for (let d = 0; d < dealsTodayCount; d++) {
+      dealIndex++;
+      // Pick rep
+      const rep = REPS_CONFIG[Math.floor(prng() * REPS_CONFIG.length)];
+      const bias = repBiases[rep.name] || { winRate: 0.7, sizeMul: 1.0, discAvg: 8 };
+
+      // Pick category
+      const category = allCategories[Math.floor(prng() * allCategories.length)];
+      const products = CATEGORIES_WITH_PRODUCTS[category];
+      const product = products[Math.floor(prng() * products.length)];
+
+      // Determine stage
+      const roll = prng();
+      let stage: DealStage = 'Closed Won';
+      if (curDate > new Date('2026-10-15') && prng() > 0.65) {
+        stage = 'In Pipeline';
+      } else if (roll > bias.winRate) {
+        stage = 'Closed Lost';
+      }
+
+      // Base pricing per category
+      let basePrice = 28000;
+      if (category === 'Cloud & Infrastructure') basePrice = 45000;
+      else if (category === 'Security & Compliance') basePrice = 42000;
+      else if (category === 'AI & Data Intelligence') basePrice = 52000;
+      else if (category === 'Analytics & BI Intelligence') basePrice = 36000;
+      else if (category === 'Developer Platforms & APIs') basePrice = 34000;
+      else if (category === 'Customer Success & Retention') basePrice = 26000;
+      else if (category === 'Collaboration & Workflows') basePrice = 24000;
+
+      // Special top products premium
+      if (product === 'CloudScale Engine' || product === 'Cognitive Copilot Studio' || product === 'Compliance Vault Enterprise') {
+        basePrice *= 1.4;
+      }
+
+      // Apply rep size multiplier + variation
+      const priceVariation = 0.7 + prng() * 0.6; // 0.7x to 1.3x
+      const revenue = Math.round((basePrice * bias.sizeMul * priceVariation) / 1000) * 1000;
+
+      // Discount %
+      const discountPct = Math.max(0, Math.min(25, Math.round(bias.discAvg + (prng() - 0.5) * 8)));
+
+      // Sales cycle days
+      const baseCycle = stage === 'Closed Lost' ? 44 : 26;
+      const salesCycleDays = Math.max(10, Math.round(baseCycle + (prng() - 0.5) * 20));
+
+      const accountName = ACCOUNTS[Math.floor(prng() * ACCOUNTS.length)];
+      const tierRoll = prng();
+      const tier: 'Enterprise' | 'Mid-Market' | 'Scale-Up' = 
+        revenue > 55000 ? 'Enterprise' : tierRoll > 0.4 ? 'Mid-Market' : 'Scale-Up';
+
+      const dateStr = curDate.toISOString().split('T')[0];
+
+      deals.push({
+        id: `DL-${rep.region}-${dealIndex}`,
+        date: dateStr,
+        salesPerson: rep.name,
+        region: rep.region,
+        category,
+        product,
+        stage,
+        revenue,
+        discountPct,
+        salesCycleDays,
+        accountName,
+        tier,
+      });
+    }
+  }
+
+  // Sort by date ascending
+  deals.sort((a, b) => a.date.localeCompare(b.date));
+  return deals;
+}
+
+export const SAMPLE_DEALS: Deal[] = generateOneYearDataset();

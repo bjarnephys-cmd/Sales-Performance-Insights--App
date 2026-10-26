@@ -124,10 +124,19 @@ export const RegionalInsights: React.FC<RegionalInsightsProps> = ({
                 </div>
               </div>
 
+              {/* Won Deals Focus Indicator */}
+              <div className="flex items-center justify-between text-[11px] bg-slate-950/70 px-2.5 py-1 rounded-md border border-slate-800/80 mb-2 font-mono">
+                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Won Deals nøgletal
+                </span>
+                <span className="text-slate-400 text-[10px]">{reg.dealsWon} af {reg.totalDeals} handler ({reg.winRate}%)</span>
+              </div>
+
               {/* Revenue & Deals summary */}
               <div className="space-y-2 py-3 border-y border-slate-800/80 my-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Total Revenue:</span>
+                  <span className="text-slate-400">Total Revenue (Won):</span>
                   <span className="text-white font-mono font-semibold tabular-nums">
                     {formatFullCurrency(reg.revenue)}
                   </span>
@@ -139,16 +148,26 @@ export const RegionalInsights: React.FC<RegionalInsightsProps> = ({
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Avg Deal Size:</span>
+                  <span className="text-slate-400">Avg Deal Size (Won):</span>
                   <span className="text-slate-200 font-mono tabular-nums">
                     {formatCurrency(reg.avgDealSize)}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Avg Discount:</span>
-                  <span className={`font-mono tabular-nums ${reg.avgDiscount > 10 ? 'text-amber-400' : 'text-slate-300'}`}>
-                    {reg.avgDiscount}%
-                  </span>
+                <div className="flex items-center justify-between text-xs pt-0.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-slate-400">Avg Discount (Won):</span>
+                  </div>
+                  <div className="text-right">
+                    <span className={`font-mono tabular-nums font-semibold ${reg.avgDiscountWon > 10 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      {reg.avgDiscountWon}%
+                    </span>
+                    <span 
+                      className="text-[10px] text-slate-400 font-mono ml-1.5 bg-slate-800/60 px-1 py-0.5 rounded border border-slate-700/60"
+                      title={`Gennemsnitlig rabat på alle ${reg.totalDeals} handler i ${reg.region} (både Closed Won og Closed Lost)`}
+                    >
+                      {reg.avgDiscountAll}% alle stages
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -178,6 +197,17 @@ export const RegionalInsights: React.FC<RegionalInsightsProps> = ({
         })}
       </div>
 
+      {/* Precision Methodology Callout: Won vs All Stages */}
+      <div className="bg-slate-900/70 border border-slate-800 rounded-lg p-3.5 mb-6 flex items-start gap-2.5 text-xs text-slate-300">
+        <AlertCircle className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+        <div className="space-y-0.5 leading-relaxed">
+          <span className="font-semibold text-white">Beregning af nøgletal for regionerne (Won vs. Alle stages):</span>
+          <p className="text-slate-400">
+            Omsætning ({formatCurrency(regionalSummaries.find(r => r.region === 'US')?.revenue || 3898000)}), gennemsnitlig deal size ({formatCurrency(regionalSummaries.find(r => r.region === 'US')?.avgDealSize || 45859)}) og primær rabat (<strong className="text-emerald-400">{regionalSummaries.find(r => r.region === 'US')?.avgDiscountWon || 8.6}%</strong>) er beregnet ud fra <strong className="text-slate-200">Closed Won</strong> handler ({regionalSummaries.find(r => r.region === 'US')?.dealsWon || 85} handler for US). Den gennemsnitlige rabat på tværs af <strong className="text-slate-200">alle stages</strong> ({regionalSummaries.find(r => r.region === 'US')?.totalDeals || 140} handler inkl. tabte) er <strong className="text-slate-300">{regionalSummaries.find(r => r.region === 'US')?.avgDiscountAll || 10.3}%</strong>.
+          </p>
+        </div>
+      </div>
+
       {/* Comparative Visual Benchmark Bar */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
         <div className="flex items-center justify-between mb-3 text-xs">
@@ -190,12 +220,13 @@ export const RegionalInsights: React.FC<RegionalInsightsProps> = ({
         <div className="space-y-3">
           {regionalSummaries.map(reg => {
             const rawVal = getMetricValueForBar(reg);
-            const pct = Math.round((rawVal / maxValue) * 100);
+            const pct = maxValue > 0 ? Math.round((rawVal / maxValue) * 100) : 0;
+            const barWidth = rawVal <= 0 || pct <= 0 ? 0 : Math.max(2, pct);
             return (
               <div key={reg.region} className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-300 font-medium flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                    <span className={`w-2 h-2 rounded-full ${rawVal > 0 ? 'bg-indigo-500' : 'bg-slate-700'}`} />
                     {reg.region}
                   </span>
                   <span className="text-white font-mono font-semibold tabular-nums">
@@ -204,8 +235,10 @@ export const RegionalInsights: React.FC<RegionalInsightsProps> = ({
                 </div>
                 <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800/80">
                   <div
-                    className="h-full bg-gradient-to-r from-indigo-500 to-indigo-400 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.max(5, pct)}%` }}
+                    className={`h-full transition-all duration-500 rounded-full ${
+                      barWidth > 0 ? 'bg-gradient-to-r from-indigo-500 to-indigo-400' : 'bg-transparent'
+                    }`}
+                    style={{ width: `${barWidth}%` }}
                   />
                 </div>
               </div>

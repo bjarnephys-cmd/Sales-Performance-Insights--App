@@ -11,23 +11,33 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+// Port 3000 is required by the AI Studio dev environment iframe
+const PORT = 3000;
 
 app.use(express.json({ limit: '10mb' }));
 
-// Server-side Gemini client initialization with mandatory User-Agent
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    },
-  },
-});
+// Safe Server-side Gemini client initialization with mandatory User-Agent
+let aiClient: GoogleGenAI | null = null;
+function getAIClient(): GoogleGenAI | null {
+  if (!process.env.GEMINI_API_KEY) {
+    return null;
+  }
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
+  }
+  return aiClient;
+}
 
 // Health check endpoint
 app.get('/api/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', port: PORT, timestamp: new Date().toISOString() });
 });
 
 // API: Generate AI-assisted Monthly Sales Executive Summary
@@ -59,6 +69,13 @@ Requirements:
 3. Highlight specific red flags (e.g. heavy discounting, stalled deals, low win rates).
 4. Provide concrete, actionable coaching recommendations for sales management in the upcoming month.
 `;
+
+    const ai = getAIClient();
+    if (!ai) {
+      return res.status(503).json({ 
+        error: 'GEMINI_API_KEY is not configured in the environment. Please configure it in the Secrets panel.' 
+      });
+    }
 
     const modelsToTry = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.1-flash-lite'];
     let lastError: any = null;
@@ -189,6 +206,13 @@ ${JSON.stringify(datasetSummary, null, 2)}
 Provide a structured, helpful answer formatted with bullet points and bold metrics where appropriate. Max 3-4 paragraphs.
 `;
 
+    const ai = getAIClient();
+    if (!ai) {
+      return res.status(503).json({ 
+        error: 'GEMINI_API_KEY is not configured in the environment.' 
+      });
+    }
+
     const modelsToTry = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.1-flash-lite'];
     let answerText = '';
 
@@ -229,7 +253,7 @@ async function startServer() {
 
   if (!isProduction) {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);

@@ -34,7 +34,7 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
               Product & Category Revenue Matrix
             </h2>
             <span className="text-xs text-slate-500 font-mono">·</span>
-            <span className="text-xs text-indigo-400 font-medium">4 Categories · 5 Products Each</span>
+            <span className="text-xs text-indigo-400 font-medium">{categorySummaries.length} Categories · {allProducts.length} Products</span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Key Question: <span className="text-slate-300 italic font-medium">Which products drive the most revenue?</span>
@@ -49,7 +49,7 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
         )}
       </div>
 
-      {/* 4 Category Summary Cards */}
+      {/* Category Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {categorySummaries.map(cat => {
           const sharePct = totalSaaSRevenue > 0 ? Math.round((cat.revenue / totalSaaSRevenue) * 100) : 0;
@@ -97,7 +97,7 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
-          All 20 Products
+          All {allProducts.length} Products
         </button>
         {categorySummaries.map(c => (
           <button
@@ -109,7 +109,7 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            {c.category} (5)
+            {c.category} ({c.products.length})
           </button>
         ))}
       </div>
@@ -127,7 +127,7 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
                 <th className="py-3 px-3 text-right">Deals Won</th>
                 <th className="py-3 px-3 text-right">Win Rate</th>
                 <th className="py-3 px-3 text-right">Avg Deal</th>
-                <th className="py-3 px-3 text-right">Discount</th>
+                <th className="py-3 px-3 text-right" title="Gennemsnitlig rabat på vundne handler (Won) · Viser også rabat på alle handler">Avg Disc. (Won)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono tabular-nums text-slate-300">
@@ -178,8 +178,13 @@ export const ProductPerformance: React.FC<ProductPerformanceProps> = ({
                     <td className="py-3 px-3 text-right text-slate-300">
                       {formatCurrency(p.avgDealSize)}
                     </td>
-                    <td className={`py-3 px-3 text-right ${p.avgDiscount > 12 ? 'text-amber-400' : 'text-slate-400'}`}>
-                      {p.avgDiscount}%
+                    <td className="py-3 px-3 text-right">
+                      <span className={p.avgDiscountWon > 12 ? 'text-amber-400 font-semibold' : 'text-slate-300'}>
+                        {p.avgDiscountWon}%
+                      </span>
+                      <span className="text-[10px] text-slate-500 block font-normal font-mono" title={`Rabat på alle handler for ${p.product}: ${p.avgDiscountAll}%`}>
+                        {p.avgDiscountAll}% alle
+                      </span>
                     </td>
                   </tr>
                 );
