@@ -81,12 +81,13 @@ $$\text{Total Company Annual Target (12 Months)} = \$1,855,000 \times 12 = \math
 When a user filters the dashboard by a single category (e.g. *Cloud & Infrastructure*):
 * Realized Won Revenue in that category: **$2,912,000**.
 * If compared directly against the **whole company's total annual quota** ($22,260,000):
-  $$\frac{\$2,912,000}{\$22,260,000} = \mathbf{13.1\%}$$
+  $$\frac{\$2,912,000}{\$22,260,000} = 13.1%
   This is the category's **Portfolio Share** (how much of the entire company's revenue it represents), *not* its actual performance against its own product target.
 * To provide meaningful performance tracking, the analytical engine computes a **Proportional Scope Target**:
-  $$\text{Category Share} = \frac{\text{Historical Category Won Revenue}}{\text{Total Won Revenue}} \approx 15.2\%$$
-  $$\text{scopeTarget} = \$22,260,000 \times 15.2\% = \mathbf{\$3,383,520}$$
-  $$\text{Actual Scope Attainment} = \frac{\$2,912,000}{\$3,383,520} = \mathbf{86\%}$$
+  $$\text{Category Share} = \frac{\text{Historical Category Won Revenue}}{\text{Total Won Revenue}}  =15.2%
+  $$\text{scopeTarget} = \  $22,260,000 *  15.2\% = $3,383,520
+  $$\text{Actual Scope Attainment} = \frac{\$2,912,000}{\$3,383,520} = 86%
+  
 The UI exposes both values transparently with an interactive explanation accordion in `KPICards.tsx`.
 
 ---
@@ -97,9 +98,9 @@ When auditing United States numbers (1 Year, All Categories):
 * **Closed Won Deals Only (85 deals)**:
   * Deal Count: **85**
   * Revenue: **$3,898,000**
-  * Average Deal Size: $\$3,898,000 \div 85 = \mathbf{\$45,858.82}$ ($\approx \$45.9\text{k}$)
+  * Average Deal Size: $\$3,898,000 \div 85 = \mathbf{\$45,858.82}$  = $45.9k
   * Sum of Discounts: **732%**
-  * **Average Discount (Won Deals)**: $732\% \div 85 = \mathbf{8.61\%}$ ($8.6\%$)
+  * **Average Discount (Won Deals)**: $732\% \div 85 = \mathbf{8.61\%}$   =8.6%
 * **All Stages (Won + Lost, 140 deals)**:
   * Total Deals: **140** (85 Closed Won + 55 Closed Lost)
   * Total Revenue of all quotes: **$6,261,000**
@@ -122,7 +123,7 @@ $$\Delta\text{Rev} = \text{Revenue}_{\text{currentMonth}} - \text{Revenue}_{\tex
 $$\text{MoM \%} = \left(\frac{\Delta\text{Rev}}{\text{Revenue}_{\text{previousMonth}}}\right) \times 100$$
 * Adheres to active scope filters (e.g. if filtered to "Europe", MoM compares Europe's latest month vs prior month).
 * Displays the baseline comparison labels in the card footer (e.g. `vs 10/26 ($312k)`).
-
+ 
 ---
 
 ## 3. Core Workflows & Features
